@@ -1,6 +1,6 @@
 import numpy as np
 
-def fill_rasterized_polygon(img, colors=(255,255,255)):
+def fill_rasterized_polygon(img, colors):
     """
     Preenche um polígono rasterizado com as cores especificadas.
     

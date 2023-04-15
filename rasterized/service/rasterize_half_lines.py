@@ -62,19 +62,15 @@ def rasterize_half_lines(resolution, aspect_ratio=True, semirretas=None, colors=
             [(-1, -1), (1, 1)],     # Semirreta inclinada na direção positiva
             [(1, -1), (-1, 1)],  # Semirreta inclinada na direção oposta
         ]
-    # if colors is None:
-    #     colors = [
-    #         (255, 0, 0),  # Vermelho
-    #         (0, 255, 0),  # Verde
-    #         (0, 0, 255),  # Azul
-    #         (255, 255, 0),  # Amarelo
-    #     ]
+
     for i, semirreta in enumerate(semirretas):
         pixels = rasterize_normalized_line(semirreta[0][0], semirreta[0][1], semirreta[1][0], semirreta[1][1], width, height, aspect_ratio)
         for x, y in pixels:
             if x >= 0 and x < width and y >= 0 and y < height:
                 if colors is None:
                     img[y, x] = (255,255,255)
+                elif len(colors) == 1:
+                    img[y, x] = colors[0]
                 else:
                     img[y, x] = colors[i]
                     
