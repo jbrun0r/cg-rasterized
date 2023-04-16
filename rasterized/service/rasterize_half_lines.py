@@ -17,11 +17,15 @@ def rasterize_half_lines(resolution, aspect_ratio=True, semirretas=None, colors=
         seja calculada automaticamente com base na largura. O padrão é True.
     semirretas : list, opcional
         Uma lista de semirretas a serem rasterizadas. Cada semirreta é definida
-        por uma lista de dois pontos: [ponto_inicial, ponto_final]. O padrão é uma
-        lista de quatro semirretas pré-definidas: vertical, horizontal e duas diagonais.
+        por uma lista de dois pontos: [ponto_inicial, ponto_final]. Uma semirreta é um
+        segmento de reta que se estende indefinidamente a partir de seu ponto inicial.
+        O padrão é uma lista de quatro semirretas pré-definidas: vertical, horizontal e
+        duas diagonais.
     colors : list, opcional
-        Uma lista de cores a serem usadas para desenhar as semirretas. O padrão é uma
-        lista de quatro cores pré-definidas: vermelho, verde, azul e amarelo.
+        Uma lista de cores a serem usadas para desenhar as semirretas. A lista deve ter
+        o mesmo número de elementos que a lista de semirretas. As cores podem ser 
+        especificadas como tuplas de valores RGB de 0 a 255. Se nenhuma cor for 
+        especificada, a imagem será desenhada em branco.
 
     Retorna
     -------
@@ -47,20 +51,17 @@ def rasterize_half_lines(resolution, aspect_ratio=True, semirretas=None, colors=
     >>> img = rasterize_semirretas((640, 480), False)
     """
     
-    ASPECT_RATIO = 16/9
     if isinstance(resolution, int):
         width = height = resolution
     else:
         width, height = resolution
-        if aspect_ratio:
-            height = int(width/ASPECT_RATIO)  # Proporção de aspecto 16:9
     img = np.zeros((height, width, 3), dtype=np.uint8)
     if semirretas is None:
         semirretas = [
             [(0, -1), (0, 1)],         # Semirreta vertical
             [(-1, 0), (1, 0)],         # Semirreta horizontal
-            [(-1, -1), (1, 1)],     # Semirreta inclinada na direção positiva
-            [(1, -1), (-1, 1)],  # Semirreta inclinada na direção oposta
+            [(-1, -1), (1, 1)],        # Semirreta inclinada na direção positiva
+            [(1, -1), (-1, 1)],        # Semirreta inclinada na direção oposta
         ]
 
     for i, semirreta in enumerate(semirretas):

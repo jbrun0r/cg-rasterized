@@ -5,9 +5,10 @@ from tkinter import messagebox
 import  tkinter as tk
 
 from service.plot_rasterized_polygon import plot_rasterized_polygon
+from service.plot_half_lines import plot_half_lines
 
 window = Tk()
-window.title("Rasterizar Polígonos")
+window.title("Rasterização")
 window.geometry("862x519")
 window.resizable(False,False)
 window.configure(bg="#3A7FF6")
@@ -20,11 +21,17 @@ canvas.create_rectangle(431, 0, 431 + 431, 0 + 519, fill="#FCFCFC", outline="")
 
 # Half Lines
 canvas.create_text(
-    490.0, 156.0, text="Lista de semirretas", fill="#515486",
+    490.0, 156.0, text="Lista de coordenadas", fill="#515486",
     font=("Arial-BoldMT", int(13.0)), anchor="w")
 half_lines_entry = tk.Entry(bd=0, bg="#F6F7F9",fg="#000716",  highlightthickness=0)
 half_lines_entry.place(x=490.0, y=137+25, width=321.0, height=35)
-half_lines_string = "0 0.866 0.5 0, 0.5 0 -0.5 0, -0.5 0 0 0.866"
+a = "0.5 0 0.25 0.433, "
+b = "0.25 0.433 -0.25 0.433, "
+c = "-0.25 0.433 -0.5 0, "
+d = "-0.5 0 -0.25 -0.433, "
+e = "-0.25 -0.433 0.25 -0.433, "
+f = "0.25 -0.433 0.5 0"
+half_lines_string = a + b + c + d + e + f
 half_lines_entry.insert(0,half_lines_string)
 
 
@@ -45,23 +52,29 @@ color_entry.place(x=490.0, y=299+25, width=321.0, height=35)
 color_entry.insert(0, "255,255,255")
 
 canvas.create_text(
-    646.5, 428.5, text="Generate",
-    fill="#FFFFFF", font=("Arial-BoldMT", int(13.0)))
-canvas.create_text(
-    540.0, 88.0, text="Polígono:",
+    540.0, 88.0, text="Dados:",
     fill="#515486", font=("Arial-BoldMT", int(22.0)))
 
+check = tk.BooleanVar()
+checked = tk.Checkbutton(window, text="É polígono?",
+    variable=check, onvalue=True, offvalue=False, bg="white",
+    fg="#515486", font=("Arial-BoldMT", int(10.0)),
+    activeforeground="#515486", activebackground="white",
+    ).place(x=490, y=360)
+
 title = tk.Label(
-    text="Rasterização de Polígonos", bg="#243e76",
+    text="Rasterização", bg="#243e76",
     fg="white",justify="left", font=("Arial-BoldMT", int(20.0)))
 title.place(x=20.0, y=120.0)
 canvas.create_rectangle(25, 160, 33 + 60, 160 + 5, fill="#FCFCFC", outline="")
 
 info_text = tk.Label(
-    text="Para rasterizar polígonos basta\n"
-    "inserir a lista de semirretas,\n"
-    "a resolução e a cor do polígono.\n"
-    "\n\n\n\n"
+    text="Para rasterizar retas basta\n"
+    "inserir a lista de coordenadas,\n"
+    "a resolução e a cor. Se as retas\n"
+    "compõem um polígon convexo,\n"
+    "marque 'É polígono'."
+    "\n\n"
     ,
     bg="#243e76", fg="white", justify="left",
     font=("Georgia", int(16.0)))
@@ -90,9 +103,12 @@ def plot():
     color = list(map(int, color.split(",")))
     color = [tuple(color)]
     
-    return plot_rasterized_polygon(resolution, True, half_lines, color)
+    if check.get():
+        return plot_rasterized_polygon(resolution, True, half_lines, color)
+    else:
+        return plot_half_lines(resolution, True, half_lines, color)
 
-rasterize_btn_img = PhotoImage(file="button.png")
+rasterize_btn_img = PhotoImage(file="assets/button.png")
 rasterize_btn = tk.Button(
     image=rasterize_btn_img, borderwidth=0, highlightthickness=0,
     command=plot, relief="flat", cursor="hand2")
@@ -100,18 +116,3 @@ rasterize_btn.place(x=490, y=401, width=321, height=55)
 
 window.mainloop()
 
-quadrado = [
-    [(0.5, -0.5), (0.5, 0.5)],   # Aresta da direita
-    [(0.5, 0.5), (-0.5, 0.5)],   # Aresta superior
-    [(-0.5, 0.5), (-0.5, -0.5)], # Aresta da esquerda
-    [(-0.5, -0.5), (0.5, -0.5)]  # Aresta inferior
-]
-
-hexagon = [
-    [(0.5, 0), (0.25, 0.433)],   # semirreta da aresta superior direita
-    [(0.25, 0.433), (-0.25, 0.433)],  # semirreta da aresta superior
-    [(-0.25, 0.433), (-0.5, 0)],   # semirreta da aresta superior esquerda
-    [(-0.5, 0), (-0.25, -0.433)],   # semirreta da aresta inferior esquerda
-    [(-0.25, -0.433), (0.25, -0.433)],  # semirreta da aresta inferior
-    [(0.25, -0.433), (0.5, 0)]   # semirreta da aresta inferior direita
-]
