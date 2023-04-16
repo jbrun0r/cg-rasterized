@@ -5,7 +5,6 @@ Desenvolvida para consumir as função desenvolvidades neste projeto de forma ma
 
 ![png](https://github.com/jbrun0r/cg-rasterized/blob/assets/rasterized/assets/Captura%20de%20tela%20de%202023-04-16%2000-51-34.png?raw=true)
 
-
 #### Default
 A GUI é carregada com um polígono default, a GUI plota as semirretas definidas no modelo contínuo, as arestas do polígono rasterizado e depois o polígono preenchido na cor escolhida nos subplots do gráfico.
 
@@ -452,4 +451,5 @@ plot_rasterized_polygon(resolutions, True, hexagon, colors)
 
     
 ![png](https://github.com/jbrun0r/cg-rasterized/blob/assets/rasterized/assets/output_12_1.png?raw=true)
-    
+![gif](https://github.com/jbrun0r/cg-rasterized/blob/assets/rasterized/assets/gif.gif?raw=true)
+
